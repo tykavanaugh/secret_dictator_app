@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Lobby
+{% endblock %}
+
+{% block main %}
+
+<p></p><p></p>
+<form class="form-inline" action = "/" method="post">
+    <button class="btn btn-outline-primary" type="submit" name = "createGame" value = "createGame">Create Game</button>
+    &nbsp;&nbsp;
+    <input type="text" id="gamepassword" name="gamePassword" placeholder = "Password for game"><br>
+
+</form>
+
+<div class="section">
+<table>
+        <thead>
+            <tr>
+                <th>Game Number</th>
+                <th>Owner</th>
+                <th>Players</th>
+                <th>Join</th>
+            </tr>
+        </thead>
+        <tbody>
+        {%for game in games %}
+        <tr>
+            <td>{{ game.gameID }}</td>
+            <td>{{ game.ownerName }}</td>
+            <td>{{ game.playerCount }}/10</td>
+            <td><form class="form-inline" action = "/" method="post"><button class="btn btn-dark" type="submit" name = "joinGame" value = "{{ game.gameID }}">Join Game</button></form></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<form class="form-inline" action = "/" method="post">
+    <button class="btn btn-outline-secondary" type="submit" name = "refreshGames" value = "refreshGames" style="float: right;">Refresh</button>
+
+</form>
+{% endblock %}

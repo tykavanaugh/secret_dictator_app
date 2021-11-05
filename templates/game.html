@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Game: {{ gameID }}
+{% endblock %}
+
+{% block main %}
+<div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Players:
+                    </a>
+                </li>
+                <form action="/game" method="post">
+                {% for player in players %}
+                    <li>
+                            <button type="submit" class= "{{ playerStatus[player].button }}" name = "playerbutton" value = "{{ player }}">{{ playerStatus[player].title }}{{ player }}</button>
+
+                    </li>
+                {% endfor %}
+                </form>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <script>
+            function myFunction() {
+              var x = document.getElementById("gameboards");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            }
+        </script>
+        {% if boardStatus %}
+        <button class="btn btn-dark" onclick="myFunction()">Show/Hide Board</button>
+        <div id="page-content-wrapper">
+        <div id="gameboards">
+            <img src="static/assets/{{ boardStatus['liberal'] }}">
+            <img src="static/assets/{{ boardStatus['fascist'] }}">
+        </div>
+        {% endif %}
+            <div class="jumbotron">
+              <h1 class="display-4">{{ jumbo.header }}</h1>
+              <p class="lead">{{ jumbo.secondary }}</p>
+              <hr class="my-4">
+              <p>{{ jumbo.text|safe }}</p>
+              {% if jumbo.showButtons %}
+              <p class="lead">
+                <form action="/game" method="post">
+                    <button class="btn btn-success btn-lg" type="submit" role="button" name="ja" value = "ja">Ja!</button>
+                    <button class="btn btn-danger btn-lg" type="submit" role="button" name="nein" value = "nein">Nein!</button>
+                </form>
+              </p>
+              {% endif %}
+              {% if jumbo.showVeto %}
+              <p class="lead">
+                <form action="/game" method="post">
+                    <button class="btn btn-info btn-lg" type="submit" role="button" name="veto" value = "veto">Veto!</button>
+                </form>
+              </p>
+              {% endif %}
+              {% if jumbo.policies %}
+              <p class="lead">
+                Choose Policy to Discard
+                {% for i in range(0,jumbo.policies|length) %}
+                        {% if jumbo.policies[i] == "liberal" %}
+                        <form action="/game" method="post">
+                            <button class="btn btn-success btn-lg" type="submit" role="button" name="{{ jumbo.policies[i] }}" value = "{{ jumbo.policies[i] }}">Liberal</button>
+                        </form>
+                        {% else %}
+                        <form action="/game" method="post">
+                            <button class="btn btn-danger btn-lg" type="submit" role="button" name="{{ jumbo.policies[i] }}" value = "{{ jumbo.policies[i] }}">Fascist</button>
+                        </form>
+                        {% endif %}
+                {% endfor %}
+              </p>
+              {% endif %}
+            </div>
+            <p></p>
+            {% if startButton %}
+            <form action="/game" method="post">
+                <button type="submit" class="btn btn-info btn-lg" name="startGame" value="startGame">Start Game</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+{% endblock %}

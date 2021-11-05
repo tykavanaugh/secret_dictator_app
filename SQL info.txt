@@ -1,0 +1,65 @@
+CREATE TABLE playerDetails
+(playerID INTEGER,
+gameID INTEGER,
+turnOrder INTEGER,
+playerRole TEXT,
+alive INTEGER DEFAULT 1,
+isChan INTEGER DEFAULT 0,
+isPres INTEGER DEFAULT 0,
+isElig INTEGER DEFAULT 1,
+nominated INTEGER DEFAULT 0,
+hasVoted INTEGER DEFAULT 0,
+hasChoosen INTEGER DEFAULT 0,
+isElected INTEGER DEFAULT 0,
+PRIMARY KEY(playerID));
+
+CREATE TABLE details
+(gameID INTEGER,
+gameSize INTEGER,
+winner TEXT,
+turnState INTEGER DEFAULT 0,
+turnRotation INTEGER DEFAULT 0,
+failedVotes INTEGER DEFAULT 0,
+fpolicies INTEGER DEFAULT 0,
+lpolicies INTEGER DEFAULT 0,
+deck TEXT,
+playersAlive INTEGER,
+PRIMARY KEY(gameID));
+
+CREATE TABLE users
+(id INTEGER,
+username TEXT NOT NULL,
+hash TEXT NOT NULL,
+activeGame INTEGER,
+PRIMARY KEY(id));
+
+CREATE TABLE games
+(gameID INTEGER,
+ownerName TEXT NOT NULL,
+ownerID INTEGER,
+playerList TEXT NOT NULL,
+playerCount INTEGER,
+active INTEGER,
+password TEXT NOT NULL,
+started INTEGER,
+PRIMARY KEY(gameID));
+
+
+
+"""
+
+SQL turn states:
+0 President- waiting for nomination, person after previous president if not first time.
+1 Chancellor choosen- election- wait for votes
+2 Failed, advance tracker and go back to 0, or if chaos random policy 6 and reset tracker
+3 Elected- check if Chancellor is Hitler if 3 fpolicies else give Pres 3 policies from deck and update deck. Shuffle is deck len < 3
+4 President choose. Chancellor gets 2 policies. If 5 fpolicies, veto option to 5.
+5 If veto choose, let President agree or disagree. If agree to go 0. Otherwise, Chancellor policy is enacted
+6 Enact policy- display text about policy. Check if game should be over. Check if goverment has power to use and go to power used.
+7 Investigation then to 0
+8 Special election- double check logic goes back to regular rotation after
+9 Policy peek then to 0
+10 Execution then to 0- kill off player, double check logic and database are correctly updated, and turn rotation is kept.
+11 Victory screen
+
+"""
